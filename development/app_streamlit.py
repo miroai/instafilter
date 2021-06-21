@@ -1,3 +1,4 @@
+import base64
 import streamlit as st
 import numpy as np
 from PIL import Image
@@ -52,7 +53,8 @@ def Main():
             st.image(img1, caption = f"{model_name} filter")
 
             if st.checkbox('Download Image'):
-                st.markdown(get_image_download_link(img1), unsafe_allow_html = True)
+                st.markdown(get_image_download_link(Image.fromarray(img1), str_msg = 'Click To Download Image'), 
+                    unsafe_allow_html = True)
         with r_col:
             st.image(img0, caption = "Original")
 
