@@ -7,7 +7,7 @@ import instafilter
 from instafilter.model import ColorNet
 from dataset import ColorizedDataset
 
-device = "cuda"
+device = "cpu" #"cuda"
 loss_func = torch.optim.AdamW
 
 module_location = Path(instafilter.__file__).resolve().parent
