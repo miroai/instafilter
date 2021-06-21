@@ -6,10 +6,10 @@ from .utils import features_from_image
 from .model import ColorNet
 
 model_location = Path(__file__).resolve().parent / "models"
-
+default_device = "cuda" if torch.cuda.is_available() else "cpu"
 
 class Instafilter:
-    def __init__(self, name, device="cuda", batch_size=2 ** 16):
+    def __init__(self, name, device= default_device , batch_size=2 ** 16):
         """
         Load an instafilter for processing.
         name must be one from Instafilter.get_models()
