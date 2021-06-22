@@ -22,47 +22,47 @@ def get_image_download_link(pil_im, str_msg = 'Download result',
 	return href
 
 def Main():
-    st.set_page_config(
-        layout="wide",
-        initial_sidebar_state="expanded",
-    )
+	st.set_page_config(
+		layout="wide",
+		initial_sidebar_state="expanded",
+	)
 
-    url = "https://github.com/thoppe/instafilter"
-    st.markdown("# [Instafilter]({url}) demo")
+	url = "https://github.com/thoppe/instafilter"
+	st.markdown("# [Instafilter]({url}) demo")
 
-    l_col , r_col = st.beta_columns(2)
+	l_col , r_col = st.beta_columns(2)
 
-    with l_col:
-        model_name = st.selectbox(
-            "Choose a filter",
-            sorted(Instafilter.get_models()),
-            index=20,
-        )
-    model = Instafilter(model_name, device = 'cpu')
-    with r_col:
-        raw_image_bytes = st.file_uploader("Choose an image...", type = ['jpg', 'jpeg'], accept_multiple_files = False)
+	with l_col:
+		model_name = st.selectbox(
+			"Choose a filter",
+			sorted(Instafilter.get_models()),
+			index=20,
+		)
+	model = Instafilter(model_name, device = 'cpu')
+	with r_col:
+		raw_image_bytes = st.file_uploader("Choose an image...", type = ['jpg', 'jpeg'], accept_multiple_files = False)
 
-    if raw_image_bytes is not None:
+	if raw_image_bytes is not None:
 		im_name, im_ext = os.path.splitext(raw_image_bytes.name)
 		out_im_name = im_name + f'_{model_name}' + im_ext
-        img0 = np.array(Image.open(raw_image_bytes))
+		img0 = np.array(Image.open(raw_image_bytes))
 
-        with st.spinner(text="Applying filter..."):
-            # Apply the model, convert to BGR first and after
-            img1 = model(img0[:, :, ::-1], is_RGB=False)[:, :, ::-1]
+		with st.spinner(text="Applying filter..."):
+			# Apply the model, convert to BGR first and after
+			img1 = model(img0[:, :, ::-1], is_RGB=False)[:, :, ::-1]
 
-        l_col, r_col = st.beta_columns(2)
-        with l_col:
-            st.image(img1, caption = f"{model_name} filter")
+		l_col, r_col = st.beta_columns(2)
+		with l_col:
+			st.image(img1, caption = f"{model_name} filter")
 
-            if st.checkbox('Download Image'):
-                st.markdown(
+			if st.checkbox('Download Image'):
+				st.markdown(
 					get_image_download_link(Image.fromarray(img1),
 						str_msg = 'Click To Download Image',
 						fname = out_im_name),
-                    unsafe_allow_html = True)
-        with r_col:
-            st.image(img0, caption = "Original")
+					unsafe_allow_html = True)
+		with r_col:
+			st.image(img0, caption = "Original")
 
 if __name__ == '__main__':
 	Main()
