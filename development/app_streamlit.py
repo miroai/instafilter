@@ -1,4 +1,4 @@
-import base64
+import base64, os
 import streamlit as st
 import numpy as np
 from PIL import Image
@@ -7,7 +7,8 @@ from io import BytesIO
 from instafilter import Instafilter
 
 #st.set_option("deprecation.showfileUploaderEncoding", False)
-def get_image_download_link(pil_im, str_msg = 'Download result', str_format = 'JPEG'):
+def get_image_download_link(pil_im, str_msg = 'Download result',
+		fname = None, str_format = 'JPEG'):
 	"""
 	Generates a link allowing the PIL image to be downloaded
 	in:  PIL image
@@ -16,7 +17,8 @@ def get_image_download_link(pil_im, str_msg = 'Download result', str_format = 'J
 	buffered = BytesIO()
 	pil_im.save(buffered, format= str_format)
 	img_str = base64.b64encode(buffered.getvalue()).decode()
-	href = f'<a href="data:file/jpg;base64,{img_str}">{str_msg}</a>'
+	fname_str = f'download="{fname}"' if fname else ''
+	href = f'<a href="data:file/jpg;base64,{img_str}" {fname_str}>{str_msg}</a>'
 	return href
 
 def Main():
@@ -38,10 +40,11 @@ def Main():
         )
     model = Instafilter(model_name, device = 'cpu')
     with r_col:
-        raw_image_bytes = st.file_uploader("Choose an image...")
+        raw_image_bytes = st.file_uploader("Choose an image...", type = ['jpg', 'jpeg'], accept_multiple_files = False)
 
     if raw_image_bytes is not None:
-
+		im_name, im_ext = os.path.splitext(raw_image_bytes.name)
+		out_im_name = im_name + f'_{model_name}' + im_ext
         img0 = np.array(Image.open(raw_image_bytes))
 
         with st.spinner(text="Applying filter..."):
@@ -53,7 +56,10 @@ def Main():
             st.image(img1, caption = f"{model_name} filter")
 
             if st.checkbox('Download Image'):
-                st.markdown(get_image_download_link(Image.fromarray(img1), str_msg = 'Click To Download Image'), 
+                st.markdown(
+					get_image_download_link(Image.fromarray(img1),
+						str_msg = 'Click To Download Image',
+						fname = out_im_name),
                     unsafe_allow_html = True)
         with r_col:
             st.image(img0, caption = "Original")
