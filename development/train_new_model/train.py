@@ -138,7 +138,7 @@ if __name__ == "__main__":
 	else:
 		f_source = "input/Normal.jpg"
 
-		for f_target in tqdm(Path("input").glob("*.jpg"), desc = f"looking for models to train in {Path("input")}"):
+		for f_target in tqdm(Path("input").glob("*.jpg"), desc = f"looking for models to train in {Path('input')}"):
 
 			if "Normal.jpg" in str(f_target):
 				continue
