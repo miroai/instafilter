@@ -6,7 +6,7 @@ from instafilter.utils import features_from_image
 
 
 class ColorizedDataset(Dataset):
-	def __init__(self, f_source, f_target, device):
+	def __init__(self, f_source, f_target, device, debug_mode = False):
 
 		if os.path.isfile(f_source) and os.path.isfile(f_target):
 			# load single images
@@ -19,6 +19,8 @@ class ColorizedDataset(Dataset):
 			l_im_fps = [f for f in os.listdir(f_source) if f.endswith(('.jpg','.JPG'))]
 			assert len(l_im_fps)>0, f"not jpg nor JPG files found in {f_source}"
 
+			l_im_fps = tqdm(l_im_fps, desc ="extracting RBG and SL from images") if debug_mode else l_im_fps
+
 			f0_all = [features_from_image(
 						cv2.imread(os.path.join(f_source, f))
 						)
@@ -30,10 +32,11 @@ class ColorizedDataset(Dataset):
 			f0 = np.concatenate(f0_all, axis = 0)
 			f1 = np.concatenate(f1_all, axis = 0)
 
-		assert f0.shape == f1.shape
-		print('--- ColorizedDataset:')
-		print(f"\tinput dataset shape: {f0.shape}")
-		print(f"\ttarget dataset shape: {f1.shape}")
+		if debug_mode:
+			print('--- ColorizedDataset:')
+			print(f"\tinput dataset shape: {f0.shape}")
+			print(f"\ttarget dataset shape: {f1.shape}")
+		assert f0.shape == f1.shape, "Input and output dataset size does not match"
 
 		self.x = torch.tensor(f0).to(device)
 		self.y = torch.tensor(f1).to(device)

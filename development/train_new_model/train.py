@@ -79,7 +79,8 @@ def train_images( d_source, d_target, f_save_model, batch_size=2 ** 10,
 		for f in os.listdir(d_source) if f.endswith(('.jpg','.JPG'))]
 	assert all(file_check), "not all files in d_source is matched with all files in d_target"
 
-	data = ColorizedDataset(f_source = d_source, f_target = d_target, device=device)
+	data = ColorizedDataset(f_source = d_source, f_target = d_target,
+			device=device, debug_mode = True)
 	train_loader = DataLoader(data, batch_size=batch_size, shuffle=True)
 
 	net = ColorNet()
