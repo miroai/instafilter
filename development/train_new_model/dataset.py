@@ -34,10 +34,10 @@ class ColorizedDataset(Dataset):
 			f1 = np.concatenate(f1_all, axis = 0)
 
 		if debug_mode:
-			print('--- ColorizedDataset:')
+			print('--- ColorizedDataset---')
 			print(f"\tinput dataset shape: {f0.shape}")
 			print(f"\ttarget dataset shape: {f1.shape}")
-		assert f0.shape == f1.shape, "Input and output dataset size does not match"
+		assert f0.shape == f1.shape, "Input and output dataset size does not match, check your source and target image sizes"
 
 		self.x = torch.tensor(f0).to(device)
 		self.y = torch.tensor(f1).to(device)

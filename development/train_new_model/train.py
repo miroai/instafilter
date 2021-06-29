@@ -80,7 +80,7 @@ def train_images( d_source, d_target, f_save_model, batch_size=2 ** 10,
 	assert all(file_check), "not all files in d_source is matched with all files in d_target"
 
 	data = ColorizedDataset(f_source = d_source, f_target = d_target,
-			device=device, debug_mode = True)
+			device=device, debug_mode = False)
 	train_loader = DataLoader(data, batch_size=batch_size, shuffle=True)
 
 	net = ColorNet()
@@ -97,7 +97,7 @@ def train_images( d_source, d_target, f_save_model, batch_size=2 ** 10,
 	net.to(device)
 	net.train()
 
-	for epoch in tqdm(range(n_epochs)):
+	for epoch in tqdm(range(n_epochs), desc = "ColorNet training"):
 		# monitor training loss
 		train_loss = 0.0
 
@@ -127,6 +127,10 @@ if __name__ == "__main__":
 							help = 'directory of images AFTER transformation')
 	parser.add_argument("--model_name", required = False, type = str, default = None,
 							help = 'output filter name (.pt not neccessary)')
+	parser.add_argument("--epochs", required = False, type = int, default = 30,
+							help = 'number of epochs to train for. (default: 30)')
+	parser.add_argument("--bs", required = False, type = int, default = 2**10,
+							help = 'batch size. (default: 2**10)')
 	args = parser.parse_args()
 	model_location = module_location / "models"
 
@@ -135,7 +139,7 @@ if __name__ == "__main__":
 			os.path.join(model_location, os.path.basename(args.target_dir) + '.pt')
 		print(f'Training model {os.path.basename(f_model)} with images in {args.source_dir} and {args.target_dir}')
 		train_images(d_source = args.source_dir, d_target= args.target_dir,
-			f_save_model= f_model)
+			f_save_model= f_model, n_epochs = args.epochs, batch_size = args.bs)
 	else:
 		f_source = "input/Normal.jpg"
 
@@ -154,4 +158,5 @@ if __name__ == "__main__":
 
 			print("Training", f_model)
 
-			train_image_pair(f_source, f_target, f_model)
+			train_image_pair(f_source, f_target, f_model, n_epochs=args.epochs,
+				batch_size = args.bs)
