@@ -1,6 +1,7 @@
 import cv2, os
 import numpy as np
 import torch
+from tqdm import tqdm
 from torch.utils.data import Dataset
 from instafilter.utils import features_from_image
 
