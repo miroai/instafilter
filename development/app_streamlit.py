@@ -28,7 +28,7 @@ def Main():
 	)
 
 	url = "https://github.com/thoppe/instafilter"
-	st.markdown("# [Instafilter]({url}) demo")
+	st.markdown(f"# [Instafilter]({url}) demo")
 
 	l_col , r_col = st.beta_columns(2)
 
