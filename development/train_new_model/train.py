@@ -137,6 +137,9 @@ if __name__ == "__main__":
 	if args.source_dir and args.target_dir:
 		f_model = os.path.join(model_location, args.model_name + '.pt') if args.model_name else \
 			os.path.join(model_location, os.path.basename(args.target_dir) + '.pt')
+
+		assert not(os.path.isfile(f_model)), f"{f_model} already exists."
+
 		print(f'Training model {os.path.basename(f_model)} with images in {args.source_dir} and {args.target_dir}')
 		train_images(d_source = args.source_dir, d_target= args.target_dir,
 			f_save_model= f_model, n_epochs = args.epochs, batch_size = args.bs)
