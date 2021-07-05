@@ -148,12 +148,12 @@ if __name__ == "__main__":
 		train_images(d_source = args.source_dir, d_target= args.target_dir,
 			f_save_model= f_model, n_epochs = args.epochs, batch_size = args.bs)
 	elif args.input and args.target:
-		assert args.model_name is None, "model_name must be provided with --input and --target"
+		assert not(args.model_name == None), "model_name must be provided with --input and --target"
 
 		f_model = os.path.join(model_location, args.model_name + '.pt')
 		print(f'Training {f_model} from {args.input} and {args.target}...')
 		train_image_pair(f_source = args.input, f_target = args.target,
-						f_save_model = f_model, batch_size=args.bs, n_epochs=args.epochs)		
+						f_save_model = f_model, batch_size=args.bs, n_epochs=args.epochs)
 	else:
 		print(f'Looking for new model to train in {model_location}...')
 		f_source = "input/Normal.jpg"
