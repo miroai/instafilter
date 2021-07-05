@@ -151,6 +151,8 @@ if __name__ == "__main__":
 		assert not(args.model_name == None), "model_name must be provided with --input and --target"
 
 		f_model = os.path.join(model_location, args.model_name + '.pt')
+		assert not(os.path.isfile(f_model)), f"{f_model} already exists."
+		
 		print(f'Training {f_model} from {args.input} and {args.target}...')
 		train_image_pair(f_source = args.input, f_target = args.target,
 						f_save_model = f_model, batch_size=args.bs, n_epochs=args.epochs)
