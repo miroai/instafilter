@@ -127,6 +127,10 @@ if __name__ == "__main__":
 							help = 'directory of images AFTER transformation')
 	parser.add_argument("--model_name", required = False, type = str, default = None,
 							help = 'output filter name (.pt not neccessary)')
+	parser.add_argument("--input", required = False, type = str, default = None,
+							help = 'path of normal image')
+	parser.add_argument("--target", required = False, type = str, default = None,
+							help = 'path of target (transformed) image')
 	parser.add_argument("--epochs", required = False, type = int, default = 30,
 							help = 'number of epochs to train for. (default: 30)')
 	parser.add_argument("--bs", required = False, type = int, default = 2**10,
@@ -140,10 +144,18 @@ if __name__ == "__main__":
 
 		assert not(os.path.isfile(f_model)), f"{f_model} already exists."
 
-		print(f'Training model {os.path.basename(f_model)} with images in {args.source_dir} and {args.target_dir}')
+		print(f'Training model {os.path.basename(f_model)} with images in {args.source_dir} and {args.target_dir}...')
 		train_images(d_source = args.source_dir, d_target= args.target_dir,
 			f_save_model= f_model, n_epochs = args.epochs, batch_size = args.bs)
+	elif args.input and args.target:
+		assert args.model_name is None, "model_name must be provided with --input and --target"
+
+		f_model = os.path.join(model_location, args.model_name + '.pt')
+		print(f'Training {f_model} from {args.input} and {args.target}...')
+		train_image_pair(f_source = args.input, f_target = args.target,
+						f_save_model = f_model, batch_size=args.bs, n_epochs=args.epochs)		
 	else:
+		print(f'Looking for new model to train in {model_location}...')
 		f_source = "input/Normal.jpg"
 
 		for f_target in tqdm(Path("input").glob("*.jpg"), desc = f"looking for models to train in {Path('input')}"):
