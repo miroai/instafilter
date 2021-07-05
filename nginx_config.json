@@ -1,0 +1,21 @@
+{
+    "listeners": {
+        "*:80": {
+            "pass": "applications/instafilter"
+        }
+    },
+
+    "applications": {
+        "instafilter": {
+            "type": "python 3.9",
+            "processes": 1,
+            "limits":{
+              "requests": 200
+            },
+            "path": "/apps/instafilter",
+            "home": "/usr/local",
+            "module": "fast_api",
+            "callable": "app"
+        }
+    }
+}
