@@ -82,7 +82,8 @@ async def apply_instafilter(request: Request, response: Response,
 		raise HTTPException(status_code = 404, detail = f"model: {model_name} not found.")
 
 	model = Instafilter(model_name)
-	im_out = model(im, is_RGB = True)
+	# convert to BGR before and after, model's internal conversion is buggy
+	im_out = model(im[:,:,::-1], is_RGB = False)[:,:,::-1]
 	pil_im_out = Image.fromarray(im_out)
 
 	# see how to return an image in FastAPI: https://stackoverflow.com/a/67497103/14285096
