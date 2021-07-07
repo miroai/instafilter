@@ -1,5 +1,6 @@
 import os, random, time, cv2, io, warnings
 from fastapi import FastAPI, File, UploadFile, Request, Response, HTTPException
+from typing import List
 # TODO: test out fastapi-health: https://github.com/Kludex/fastapi-health
 app_version = 0.01
 app = FastAPI(
