@@ -33,7 +33,7 @@ def GetMachineStats():
 	}
 	return stats
 #------------------------------------------------#
-def image_to_bytes_array(PIL_Image, format = None, quality = 75):
+def image_to_bytes_array(PIL_Image, format = None, quality = 100):
 	'''
 	Takes a PIL Image and convert it to Binary Bytes
 	PIL_Image.tobytes() is not recommended (see: https://stackoverflow.com/a/58949303/14285096)

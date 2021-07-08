@@ -15,7 +15,7 @@ def get_image_download_link(pil_im, str_msg = 'Download result',
 	out: href string
 	"""
 	buffered = BytesIO()
-	pil_im.save(buffered, format= str_format)
+	pil_im.save(buffered, format= str_format, quality = 100)
 	img_str = base64.b64encode(buffered.getvalue()).decode()
 	fname_str = f'download="{fname}"' if fname else ''
 	href = f'<a href="data:file/jpg;base64,{img_str}" {fname_str}>{str_msg}</a>'
